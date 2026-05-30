@@ -69,14 +69,14 @@ The [live demo](https://rully-saputra15.github.io/react-idb-hooks/) is the same 
 Run it locally:
 
 ```sh
-git clone https://github.com/your-org/react-idb-hooks.git
+git clone https://github.com/rully-saputra15/react-idb-hooks.git
 cd react-idb-hooks && npm install
 cd examples/todos && npm install && npm run dev
 ```
 
 The Pages site is built and deployed automatically by [`.github/workflows/deploy-pages.yml`](./.github/workflows/deploy-pages.yml) on every push to `main`.
 
-> **First-time setup.** In your fork, go to **Settings → Pages** and set **Source** to **GitHub Actions**. Then update two strings: replace `your-org` in this README with your GitHub org/username, and update `BASE_PATH` in the workflow file if your repo is not named `react-idb-hooks`.
+> **First-time setup.** In your fork, go to **Settings → Pages** and set **Source** to **GitHub Actions**. Then update two strings: replace `rully-saputra15` in this README with your GitHub org/username, and update `BASE_PATH` in the workflow file if your repo is not named `react-idb-hooks`.
 
 ---
 
