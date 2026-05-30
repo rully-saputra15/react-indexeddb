@@ -1,0 +1,762 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>react-indexeddb · Build Plan</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<style>
+:root {
+  --fg: #1f2328;
+  --muted: #6e7781;
+  --bg: #ffffff;
+  --bg-soft: #f6f8fa;
+  --border: #d0d7de;
+  --link: #0969da;
+  --accent: #1f6feb;
+  --warn-bg: #fff8c5;
+  --warn-fg: #4d3800;
+  --rule-bg: #f0f4ff;
+  --rule-fg: #1f2937;
+  --code-fg: #1f2328;
+  --code-bg: #f6f8fa;
+  --max: 880px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fg: #e6edf3;
+    --muted: #8b949e;
+    --bg: #0d1117;
+    --bg-soft: #161b22;
+    --border: #30363d;
+    --link: #58a6ff;
+    --accent: #58a6ff;
+    --warn-bg: #2d2a1a;
+    --warn-fg: #ffd97a;
+    --rule-bg: #161b22;
+    --rule-fg: #c9d1d9;
+    --code-fg: #c9d1d9;
+    --code-bg: #161b22;
+  }
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); color: var(--fg); }
+body {
+  font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+}
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code, kbd, pre, samp { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; }
+:not(pre) > code { background: var(--code-bg); color: var(--code-fg); padding: 0.15em 0.35em; border-radius: 4px; font-size: 0.92em; border: 1px solid var(--border); }
+pre { background: var(--code-bg); padding: 14px 16px; border-radius: 8px; border: 1px solid var(--border); overflow-x: auto; }
+pre code { background: transparent; padding: 0; border: 0; }
+
+main { display: grid; grid-template-columns: 260px 1fr; gap: 32px; max-width: 1240px; margin: 0 auto; padding: 28px 24px 80px; }
+aside.toc { position: sticky; top: 16px; align-self: start; max-height: calc(100vh - 32px); overflow: auto; padding-right: 8px; font-size: 14px; }
+aside.toc h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 12px; }
+aside.toc ol { list-style: none; padding: 0; margin: 0; }
+aside.toc ol ol { padding-left: 14px; margin-top: 4px; }
+aside.toc li { margin-bottom: 4px; }
+aside.toc a { color: var(--fg); }
+aside.toc a:hover { color: var(--link); }
+article { min-width: 0; }
+article > section { margin-bottom: 56px; }
+h1 { font-size: 32px; line-height: 1.2; margin: 0 0 6px; }
+h2 { font-size: 24px; line-height: 1.3; margin: 48px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+h3 { font-size: 18px; margin: 28px 0 8px; }
+h4 { font-size: 15px; margin: 18px 0 6px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.lede { color: var(--muted); font-size: 17px; margin-top: 0; }
+
+table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 14px; }
+th, td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; vertical-align: top; }
+th { background: var(--bg-soft); }
+
+.callout { border-left: 4px solid var(--accent); background: var(--rule-bg); color: var(--rule-fg); padding: 10px 14px; border-radius: 4px; margin: 14px 0; }
+.callout.warn { border-left-color: #d4a72c; background: var(--warn-bg); color: var(--warn-fg); }
+.callout strong { display: block; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+
+.kbd { display: inline-block; padding: 2px 6px; background: var(--bg-soft); border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 4px; font-size: 0.85em; }
+
+.tag { display: inline-block; font-size: 11px; padding: 2px 6px; border-radius: 999px; background: var(--bg-soft); border: 1px solid var(--border); color: var(--muted); margin-right: 6px; vertical-align: middle; }
+
+.layer-card { border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin-bottom: 16px; background: var(--bg-soft); }
+.layer-card h3 { margin-top: 0; }
+.layer-card .meta { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 800px) {
+  main { grid-template-columns: 1fr; }
+  aside.toc { position: static; max-height: none; }
+  .grid2 { grid-template-columns: 1fr; }
+}
+
+.print-only { display: none; }
+@media print {
+  aside.toc { display: none; }
+  main { grid-template-columns: 1fr; max-width: none; }
+  pre, .callout, .layer-card { break-inside: avoid; }
+  .print-only { display: block; }
+}
+
+.mermaid { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 8px; padding: 12px; overflow-x: auto; text-align: center; }
+hr.divider { border: 0; height: 1px; background: var(--border); margin: 32px 0; }
+</style>
+</head>
+<body>
+<main>
+
+<aside class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#tldr">1. TL;DR</a></li>
+    <li><a href="#goals">2. Goals & non-goals</a></li>
+    <li><a href="#architecture">3. Architecture</a>
+      <ol>
+        <li><a href="#layers">3.1 Layers</a></li>
+        <li><a href="#dataflow">3.2 Data flow</a></li>
+        <li><a href="#rules">3.3 Separation rules</a></li>
+      </ol>
+    </li>
+    <li><a href="#modules">4. Module deep dive</a>
+      <ol>
+        <li><a href="#m-types">4.1 types.ts</a></li>
+        <li><a href="#m-shim">4.2 shim.ts</a></li>
+        <li><a href="#m-store">4.3 store.ts</a></li>
+        <li><a href="#m-crosstab">4.4 crossTab.ts</a></li>
+        <li><a href="#m-db">4.5 db.ts</a></li>
+        <li><a href="#m-hooks">4.6 hooks.ts</a></li>
+        <li><a href="#m-index">4.7 index.ts</a></li>
+      </ol>
+    </li>
+    <li><a href="#reactivity">5. Reactivity walkthrough</a></li>
+    <li><a href="#crosstab-flow">6. Cross-tab flow</a></li>
+    <li><a href="#tx-contract">7. Transaction contract</a></li>
+    <li><a href="#errors">8. Error mapping</a></li>
+    <li><a href="#ssr">9. SSR & StrictMode</a></li>
+    <li><a href="#react-versions">10. React 16 - 19 strategy</a></li>
+    <li><a href="#tests">11. Test strategy</a></li>
+    <li><a href="#build">12. Build & publish pipeline</a></li>
+    <li><a href="#ci">13. CI matrix</a></li>
+    <li><a href="#extending">14. Extending the library</a></li>
+    <li><a href="#debug">15. Debugging playbook</a></li>
+    <li><a href="#tree">16. File tree</a></li>
+    <li><a href="#glossary">17. Glossary</a></li>
+  </ol>
+</aside>
+
+<article>
+
+<section id="tldr">
+<h1>react-indexeddb · Build Plan</h1>
+<p class="lede">A self-contained engineering reference. Open this file offline whenever you need to debug a regression, extend the library, or onboard yourself again in six months.</p>
+
+<p><strong>What this library is.</strong> A zero-runtime-dependency, TypeScript-first React hooks library that wraps IndexedDB and exposes it reactively. Same-tab and cross-tab. Works on React 16.8 - 19. Ships in 2.4 KB gzip.</p>
+
+<p><strong>What this document is.</strong> The "why and how" behind every file. The reactivity model, the transaction-safety contract, the error mapping, the test strategy, the recipes for adding features, and the playbook for the bugs you will hit when you change something.</p>
+
+<div class="callout">
+<strong>How to use this doc</strong>
+Reading top-to-bottom takes about 25 minutes. If you are just here to debug, jump to <a href="#debug">§15 Debugging playbook</a> and skim back from there. If you want to add a feature, start at <a href="#extending">§14 Extending</a>.
+</div>
+</section>
+
+<section id="goals">
+<h2>2. Goals & non-goals</h2>
+<h4>Goals (v1)</h4>
+<ul>
+<li><strong>Reactive across components.</strong> A mutation in one component re-renders every subscribed component.</li>
+<li><strong>Reactive across tabs.</strong> A mutation in one browser tab re-renders subscribed components in every other tab on the same origin.</li>
+<li><strong>Schema-typed.</strong> One <code>interface</code> drives store names, key types, value types, and index names through every hook.</li>
+<li><strong>Zero runtime dependencies.</strong> The <code>useSyncExternalStore</code> shim is vendored, not depended on.</li>
+<li><strong>React 16.8 through 19.</strong> Native <code>useSyncExternalStore</code> on 18+, vendored shim on 16/17.</li>
+<li><strong>Concurrent-mode safe</strong> on React 18/19. Best-effort on 16/17.</li>
+<li><strong>SSR-safe.</strong> Lazy connection open. <code>getServerSnapshot</code> on every hook.</li>
+<li><strong>Small &amp; readable.</strong> Seven files. Strict separation of concerns. ~2.5 KB gzip.</li>
+</ul>
+
+<h4>Non-goals (deferred or out of scope)</h4>
+<ul>
+<li>Atom-style API. Add later if a real user need appears.</li>
+<li>Public <code>db.transaction(...)</code> escape hatch. Internal-only for now.</li>
+<li>Storage-event cross-tab fallback. <code>BroadcastChannel</code> covers our matrix.</li>
+<li>Microtask write-coalescing. Premature optimization without profiling.</li>
+<li>TanStack-Query persistence adapter. Separate package if pursued.</li>
+<li>Bulk methods (<code>bulkPut</code>, etc.) and cursor APIs. Deferred to v1.x.</li>
+<li>Encryption / sync-to-server.</li>
+<li>React Native. Hooks return <code>"unsupported"</code> at runtime.</li>
+</ul>
+</section>
+
+<section id="architecture">
+<h2>3. Architecture</h2>
+
+<h3 id="layers">3.1 Layers</h3>
+<p>Four conceptual layers, seven source files. Each file owns exactly one concept.</p>
+
+<pre class="mermaid">
+flowchart LR
+  types[types.ts<br/>schema generics] --> db
+  db[db.ts<br/>open + tx + defineIDB] --> store
+  crossTab[crossTab.ts<br/>BroadcastChannel] --> store
+  store[store.ts<br/>subscribe / notify / cache] --> hooks
+  shim[shim.ts<br/>vendored useSyncExternalStore] --> hooks
+  hooks[hooks.ts<br/>useIDB / useIDBQuery / useIDBMutation] --> indexBarrel
+  indexBarrel[index.ts<br/>public API barrel]
+</pre>
+
+<table>
+<thead><tr><th>Layer</th><th>Files</th><th>Owns</th><th>Forbidden imports</th></tr></thead>
+<tbody>
+<tr><td><strong>Types</strong></td><td><code>types.ts</code></td><td>Schema generics, Database interface, MutationOp union, INTERNAL symbol</td><td>any runtime code</td></tr>
+<tr><td><strong>Reactivity</strong></td><td><code>store.ts</code></td><td>Listener registry, version counters, fan-out</td><td>React, IndexedDB</td></tr>
+<tr><td><strong>Transport</strong></td><td><code>crossTab.ts</code></td><td>BroadcastChannel wrapper, no-op fallback</td><td>React, IndexedDB, store.ts</td></tr>
+<tr><td><strong>IDB</strong></td><td><code>db.ts</code></td><td>Open + migrate, single-request transactions, error mapping, defineIDB orchestration</td><td>React</td></tr>
+<tr><td><strong>React glue</strong></td><td><code>hooks.ts</code></td><td>useIDB, useIDBQuery, useIDBMutation</td><td>IndexedDB (uses db.ts only)</td></tr>
+<tr><td><strong>Compat</strong></td><td><code>shim.ts</code></td><td>useSyncExternalStore detection + fallback</td><td>app code</td></tr>
+<tr><td><strong>Barrel</strong></td><td><code>index.ts</code></td><td>Public re-exports only</td><td>logic of any kind</td></tr>
+</tbody>
+</table>
+
+<h3 id="dataflow">3.2 Data flow on a write</h3>
+<pre class="mermaid">
+sequenceDiagram
+  participant App as App component
+  participant Hook as useIDBMutation
+  participant DB as db.ts
+  participant IDB as IndexedDB
+  participant Store as store.ts
+  participant Channel as crossTab.ts
+  participant Tab2 as Other tab
+
+  App->>Hook: mutate({ type: "put", value })
+  Hook->>DB: internal.mutate("todos", op)
+  DB->>IDB: tx = db.transaction("todos", "readwrite")
+  DB->>IDB: store.put(value)
+  IDB-->>DB: tx.oncomplete
+  DB->>Store: notify(["todos"])
+  DB->>Channel: post({ stores: ["todos"] })
+  Store-->>Hook: bumped version, listener fires
+  Hook-->>App: re-render with new query data
+  Channel-->>Tab2: BroadcastChannel onmessage
+  Tab2->>Tab2: store.notify(["todos"])
+</pre>
+
+<h3 id="rules">3.3 Separation rules (the maintainability contract)</h3>
+<p>These are enforced by code review, not ESLint. Breaking them is the most common way to bake regressions into a future feature.</p>
+<ol>
+<li><code>db.ts</code> is the <strong>only</strong> file that imports the <code>indexedDB</code> global.</li>
+<li><code>hooks.ts</code> is the <strong>only</strong> file that imports React or <code>shim.ts</code>.</li>
+<li><code>store.ts</code> imports neither React nor IndexedDB. It is pure JavaScript with a Map and a Set.</li>
+<li><code>crossTab.ts</code> imports neither React, IndexedDB, nor <code>store.ts</code>. It only knows about <code>BroadcastChannel</code>.</li>
+<li><code>index.ts</code> contains zero logic. Only re-exports.</li>
+<li>The <code>INTERNAL</code> symbol is the single contract between <code>db.ts</code> and <code>hooks.ts</code>. Never expose it from <code>index.ts</code>.</li>
+</ol>
+</section>
+
+<section id="modules">
+<h2>4. Module deep dive</h2>
+<p>Each layer in <a href="#layers">§3.1</a> is one source file. Here is what each one owns, what it must never do, and the patterns to know when you change it.</p>
+
+<div class="layer-card" id="m-types">
+<h3>4.1 <code>src/types.ts</code></h3>
+<p class="meta"><span class="tag">type-only</span><span class="tag">no runtime</span></p>
+<p>The vocabulary of the library. Generic helpers that turn a user-declared schema interface into store names, key types, value types, and index name unions.</p>
+<h4>Public symbols</h4>
+<ul>
+<li><code>StoreSchema</code>, <code>Schema</code>, <code>SchemaLike&lt;S&gt;</code></li>
+<li><code>StoreName&lt;S&gt;</code>, <code>KeyOf&lt;S, N&gt;</code>, <code>ValueOf&lt;S, N&gt;</code>, <code>IndexNameOf&lt;S, N&gt;</code>, <code>IndexKeyOf&lt;S, N, I&gt;</code></li>
+<li><code>Database&lt;S&gt;</code>, <code>DatabaseQueryAPI&lt;S&gt;</code>, <code>DatabaseInternal&lt;S&gt;</code></li>
+<li><code>MutationOp&lt;S, N&gt;</code>, <code>ConnectionStatus</code>, <code>QueryStatus</code>, <code>MutationStatus</code></li>
+<li><code>INTERNAL</code> symbol (the only runtime export, used as an object key)</li>
+</ul>
+<h4>Why <code>SchemaLike&lt;S&gt;</code> exists</h4>
+<p>TypeScript does not give an <code>interface</code> an implicit index signature, so a user's <code>interface AppSchema { todos: ... }</code> does not satisfy <code>Record&lt;string, StoreSchema&gt;</code> at the call site. <code>SchemaLike&lt;S&gt; = { [K in keyof S]: StoreSchema }</code> is an F-bounded constraint that lets a literal object type pass while still demanding StoreSchema-shaped values. Use it on every public generic.</p>
+<h4>Pitfalls</h4>
+<ul>
+<li>If you tighten a helper from <code>S</code> to <code>S extends Schema</code>, every test that uses an <code>interface AppSchema {}</code> will fail to compile. Use <code>SchemaLike&lt;S&gt;</code> at public entry points only; helpers should accept bare <code>S</code> with conditional fallback (<code>S[N] extends { value: infer V } ? V : never</code>).</li>
+</ul>
+</div>
+
+<div class="layer-card" id="m-shim">
+<h3>4.2 <code>src/shim.ts</code></h3>
+<p class="meta"><span class="tag">~30 LOC</span><span class="tag">MIT-attributed</span></p>
+<p>Single export: <code>useSyncExternalStore</code>. On React 18+, re-exported from <code>react</code>. On 16/17, a tiny <code>useState</code> + <code>useEffect</code> fallback.</p>
+<pre><code class="language-ts">const NATIVE = (React as { useSyncExternalStore?: ... }).useSyncExternalStore;
+export const useSyncExternalStore = NATIVE ?? useSyncExternalStoreFallback;</code></pre>
+<h4>Why vendor it</h4>
+<p>The plan disallows runtime dependencies. The official <code>use-sync-external-store/shim</code> package is also MIT, ~30 lines, identical in behaviour for our use case (stable snapshots from <code>store.ts</code>). Vendoring is correct and is what most "zero-dep" libraries do.</p>
+<h4>Tearing caveat</h4>
+<p>Full concurrent-rendering tearing safety on R16/17 is impossible without React internals. The fallback is correct for stable snapshots but legacy roots have weaker guarantees than R18+ concurrent roots. The README documents this.</p>
+</div>
+
+<div class="layer-card" id="m-store">
+<h3>4.3 <code>src/store.ts</code></h3>
+<p class="meta"><span class="tag">framework-agnostic</span><span class="tag">no React</span><span class="tag">no IDB</span></p>
+<p>The reactivity layer. Two maps: a per-channel version counter, and a per-channel listener set.</p>
+<pre><code class="language-ts">interface ReactivityStore {
+  subscribe(channels: ReadonlyArray&lt;string&gt;, listener: () =&gt; void): () =&gt; void;
+  getVersion(channels: ReadonlyArray&lt;string&gt;): number;
+  notify(channels: ReadonlyArray&lt;string&gt;): void;
+}</code></pre>
+<h4>Snapshot stability rule</h4>
+<p><code>getVersion</code> returns a sum of per-channel counters. Identical numeric values are <code>Object.is</code>-equal so React skips the render. <code>notify</code> increments the counter <em>before</em> firing listeners; the listener calls <code>useSyncExternalStore</code>'s <code>onStoreChange</code>, which then re-reads <code>getVersion</code>, sees a new number, and re-renders.</p>
+<h4>Listener safety</h4>
+<p>A throwing listener does not break siblings. Each listener fires at most once per <code>notify</code> call even if it subscribed to multiple of the listed channels (deduplicated via a <code>Set</code>).</p>
+</div>
+
+<div class="layer-card" id="m-crosstab">
+<h3>4.4 <code>src/crossTab.ts</code></h3>
+<p class="meta"><span class="tag">no React</span><span class="tag">no IDB</span><span class="tag">no store.ts</span></p>
+<p>Wraps <code>BroadcastChannel</code> with a feature-detect and returns a uniform <code>{ post, onMessage, close }</code>. The channel name is <code>"react-indexeddb:" + dbName</code>.</p>
+<h4>No-op fallback</h4>
+<p>If <code>typeof BroadcastChannel === "undefined"</code> we return a no-op channel. Hooks still work; cross-tab silently disables. We do <em>not</em> polyfill via <code>storage</code> events for v1.</p>
+<h4>Why no echo-to-self</h4>
+<p>The wire only fires the receivers (the sender does not get its own message back) so the same-tab <code>store.notify</code> does not double-fire. <code>db.ts</code> calls <code>reactivity.notify</code> locally and posts on the channel separately.</p>
+</div>
+
+<div class="layer-card" id="m-db">
+<h3>4.5 <code>src/db.ts</code></h3>
+<p class="meta"><span class="tag">only file importing indexedDB</span></p>
+<p>The orchestrator. <code>defineIDB(config)</code> is the single public entry point.</p>
+<h4>Singleton open promise (StrictMode safe)</h4>
+<p>A module-level <code>Map</code> keyed by <code>${name}@${version}</code> caches the <code>Database&lt;S&gt;</code> instance. A second <code>defineIDB</code> with the same key returns the same instance. <code>onupgradeneeded</code> runs at most once per page.</p>
+<h4>Single-request transactions</h4>
+<p>Every read and write op opens its own one-shot tx. <code>readOne</code>, <code>readIndex</code>, and <code>writeOne</code> all schedule one IDBRequest synchronously and return a Promise wired to <code>request.onsuccess</code> (reads) or <code>tx.oncomplete</code> (writes). We never <code>await</code> a foreign promise inside an open transaction. See <a href="#tx-contract">§7</a>.</p>
+<h4>Error capture pattern</h4>
+<p>Many browsers and fake-indexeddb leave <code>tx.error</code> as <code>null</code> when <code>tx.onerror</code> fires; the error is on the <em>request</em>. We capture <code>request.onerror</code> into a closure and use it from <code>tx.onerror</code>/<code>tx.onabort</code>:</p>
+<pre><code class="language-ts">let captured: Error | null = null;
+const request = fn(tx.objectStore(storeName));
+request.onerror = () =&gt; { captured = mapError(request.error); };
+tx.oncomplete = () =&gt; resolve();
+tx.onerror   = () =&gt; reject(captured ?? mapError(tx.error));
+tx.onabort   = () =&gt; reject(captured ?? mapError(tx.error));</code></pre>
+<h4>Mutation fan-out</h4>
+<p><code>mutate</code> awaits the tx commit, then calls <code>reactivity.notify([storeName])</code> and (if not opted out) <code>channel.post({ stores: [storeName] })</code>. The order matters: same-tab listeners fire before cross-tab so a fast in-process consumer never sees stale data.</p>
+<h4>Test-only escape hatches</h4>
+<p><code>__resetCache</code> closes every cached connection and clears the cache. <code>__dropCache</code> clears the cache without closing - used by the cross-tab integration test to simulate two tabs in one process.</p>
+</div>
+
+<div class="layer-card" id="m-hooks">
+<h3>4.6 <code>src/hooks.ts</code></h3>
+<p class="meta"><span class="tag">only file importing React</span></p>
+<p>Three hooks, ~30-60 LOC each. None of them imports the IndexedDB global directly; they go through <code>db[INTERNAL]</code>.</p>
+<h4><code>useIDB(db)</code></h4>
+<p>Subscribes to a special status channel. Calls <code>internal.getConnection()</code> in an effect on mount so the open is lazy. SSR snapshot returns <code>{ status: "loading" }</code>. The status object reference is memoized: identical <code>{ status, error }</code> reuses the previous reference.</p>
+<h4><code>useIDBQuery(db, fn, stores)</code></h4>
+<p>The single read hook. Subscribes to the union of <code>stores</code>; <code>useSyncExternalStore</code> returns a numeric version. An effect with deps <code>[db, version]</code> re-runs the user's <code>fn</code> when either changes. The user's <code>fn</code> is held in a ref so re-renders without an invalidation do not re-fire it.</p>
+<p><code>stores</code> is content-stabilized via <code>storesKey = stores.join("\u0000")</code> + <code>useMemo</code> so passing a fresh array literal each render does not cause re-subscribes.</p>
+<h4><code>useIDBMutation(db, store)</code></h4>
+<p>State machine: <code>idle → pending → success | error</code>. <code>mutate</code> calls <code>internal.mutate</code> and rethrows. A mounted ref prevents <code>setState</code> after unmount.</p>
+</div>
+
+<div class="layer-card" id="m-index">
+<h3>4.7 <code>src/index.ts</code></h3>
+<p class="meta"><span class="tag">pure barrel</span></p>
+<p>Only re-exports from <code>db.ts</code>, <code>hooks.ts</code>, and <code>types.ts</code>. Never re-exports the <code>INTERNAL</code> symbol. If you ever feel the urge to put a function in <code>index.ts</code>, put it in the appropriate layer and re-export it instead.</p>
+</div>
+</section>
+
+<section id="reactivity">
+<h2>5. Reactivity walkthrough</h2>
+<p>Putting the layers together: what happens between a user clicking a button and another component re-rendering.</p>
+
+<h3>The lifecycle of a write + reactive read</h3>
+<ol>
+<li>Component <strong>A</strong> calls <code>mutation.mutate({ type: "put", value })</code>.</li>
+<li><code>useIDBMutation</code> sets state to <code>pending</code>, then awaits <code>internal.mutate("todos", op)</code>.</li>
+<li><code>db.ts.mutate</code> calls <code>writeOne("todos", s =&gt; s.put(value))</code>.</li>
+<li><code>writeOne</code> opens a fresh <code>readwrite</code> transaction on <code>"todos"</code>, schedules the put, and returns a Promise wired to <code>tx.oncomplete</code>.</li>
+<li>The browser's IDB engine commits the transaction. <code>tx.oncomplete</code> fires; the Promise resolves.</li>
+<li>Back in <code>db.ts.mutate</code>, control resumes after <code>await writeOne(...)</code>. We now call <code>reactivity.notify(["todos"])</code> followed by <code>channel.post({ stores: ["todos"] })</code>.</li>
+<li><code>store.ts.notify</code> bumps the per-channel version counter for <code>"todos"</code> and calls every listener subscribed to it (deduplicated).</li>
+<li>Component <strong>B</strong>'s <code>useIDBQuery(db, fn, ["todos"])</code> subscribed via <code>useSyncExternalStore</code>. Its <code>onStoreChange</code> fires, React re-reads <code>getSnapshot</code>, the new numeric version differs by <code>Object.is</code>, React schedules a re-render.</li>
+<li>The render reads <code>version</code> from <code>useSyncExternalStore</code>, which is in the deps of an effect that runs <code>fn(db)</code> again. The Promise resolves with the new data and the component sees the updated value.</li>
+<li>Component <strong>A</strong>'s mutation hook flips its state to <code>success</code>. The mutation Promise resolves.</li>
+</ol>
+
+<div class="callout">
+<strong>Order of operations (same tab vs cross-tab)</strong>
+We <code>notify</code> locally first, then <code>post</code> on the channel. Other tabs receive the message via <code>BroadcastChannel.onmessage</code> and call <code>reactivity.notify</code> in their own process. Each tab has its own <code>ReactivityStore</code> instance because <code>defineIDB</code> in tab 2 creates one when its module loads.
+</div>
+
+<h3>Why the version-counter snapshot</h3>
+<p><code>useSyncExternalStore</code>'s contract: <code>getSnapshot</code> must return the same value (by <code>Object.is</code>) until something changes. If the snapshot is a fresh object each call, React assumes the store changed and infinite-renders.</p>
+<p>We use a <em>number</em> per channel and sum them for the dep list. Numbers are <code>Object.is</code>-stable, identical sums compare equal, and any <code>notify</code> on a relevant channel strictly increases the sum.</p>
+
+<h3>Why an effect, not <code>useSyncExternalStore</code> alone, for the user's <code>fn</code></h3>
+<p>The user's <code>fn</code> is async (it queries IDB). <code>useSyncExternalStore</code> requires synchronous snapshots. So we use <code>useSyncExternalStore</code> just for the version, then drive a regular <code>useEffect</code> with <code>[db, version]</code> deps to await the user's Promise and store the result in <code>useState</code>.</p>
+</section>
+
+<section id="crosstab-flow">
+<h2>6. Cross-tab flow</h2>
+<p>Cross-tab uses <code>BroadcastChannel</code>. Each tab owns its own <code>Database&lt;S&gt;</code> object, its own <code>ReactivityStore</code>, and its own <code>BroadcastChannel</code> instance bound to the channel name <code>"react-indexeddb:" + dbName</code>.</p>
+
+<pre class="mermaid">
+sequenceDiagram
+  participant TabA
+  participant ChanA as BroadcastChannel A
+  participant Bus as Browser bus
+  participant ChanB as BroadcastChannel B
+  participant TabB
+  TabA->>ChanA: post({ stores: ["todos"] })
+  ChanA->>Bus: postMessage
+  Bus->>ChanB: onmessage
+  ChanB->>TabB: emit message
+  TabB->>TabB: reactivity.notify(["todos"])
+  TabB-->>TabB: useIDBQuery re-runs fn(db)
+</pre>
+
+<h3>What is in the message</h3>
+<pre><code class="language-ts">interface CrossTabMessage {
+  stores: ReadonlyArray&lt;string&gt;;
+}</code></pre>
+<p>That is the entire wire format. We do not ship payloads; receivers re-read from IDB. This keeps the protocol forward-compatible: adding more stores, indexes, or even data shapes never changes the wire.</p>
+
+<h3>Why not echo to self</h3>
+<p><code>BroadcastChannel</code> by spec does not deliver to the sender, but our test fake mirrors that. Echo-to-self would cause every mutation to invalidate twice in the source tab.</p>
+
+<h3>Disabling cross-tab</h3>
+<p>Pass <code>{ crossTab: false }</code> to <code>defineIDB</code>. We swap the real channel for a no-op (and skip <code>onMessage</code> wiring). Useful for tests, embedded WebViews, or when an app explicitly does not want it.</p>
+</section>
+
+<section id="tx-contract">
+<h2>7. Transaction contract</h2>
+<p>This is the one rule that, if broken, will create real data corruption. Memorize it.</p>
+
+<div class="callout warn">
+<strong>Never await a foreign Promise inside an open IDBTransaction.</strong>
+The browser auto-commits an IDB transaction when its task queue empties. <code>await</code>ing anything that does not directly settle on an IDBRequest yields control to the macrotask queue, the IDB engine sees no more pending requests, and the transaction commits early. Subsequent operations on it will throw <code>InvalidStateError</code>.
+</div>
+
+<h3>How <code>db.ts</code> respects the contract</h3>
+<ul>
+<li>Every read and write op opens its <em>own</em> tx and waits on a single request.</li>
+<li>The user never gets a raw <code>IDBTransaction</code> handle.</li>
+<li><code>useIDBMutation.mutate</code> is one tx per call.</li>
+<li><code>useIDBQuery.fn</code> can call multiple <code>db.get</code>/<code>db.getAll</code> operations - each runs in its own tx so awaits between them are safe.</li>
+</ul>
+
+<h3>What this means for performance</h3>
+<p>One tx per op is more transactions than a hand-rolled batch. For typical UI workloads (single-record reads/writes per render) the cost is negligible. If you ever need bulk semantics in a single tx (atomicity), add a v1.x <code>db.transaction(stores, mode, syncFn)</code> escape hatch where <code>syncFn</code> is required to be synchronous and the library awaits <code>tx.done</code> for you.</p>
+
+<h3>What changes if you add features</h3>
+<p>Anything that takes a callback intended to schedule IDB requests <strong>must</strong> require the callback to be sync, or accept a Promise that only ever resolves from request-success handlers wired before yielding. The README and dev-build console warnings are how we keep users from violating this themselves.</p>
+</section>
+
+<section id="errors">
+<h2>8. Error mapping</h2>
+<p>Every recoverable IDB error is mapped to a typed class so application code can <code>instanceof</code>-discriminate.</p>
+
+<table>
+<thead><tr><th>Class</th><th>Triggered by</th><th>Recovery</th></tr></thead>
+<tbody>
+<tr><td><code>IDBVersionError</code></td><td>Open with a lower version than already on disk; corrupted version field</td><td>Bump <code>version</code> in code and reload, or call <code>indexedDB.deleteDatabase</code> as a last resort</td></tr>
+<tr><td><code>IDBBlockedError</code></td><td>Another tab holds a connection on an older version, blocking your upgrade</td><td>Ask the user to close other tabs; listen for <code>onversionchange</code> in the blocking tab to auto-close</td></tr>
+<tr><td><code>IDBQuotaExceededError</code></td><td>Browser storage limit reached during a write</td><td>Prune old records, ask the user to clear cache, drop optional caches</td></tr>
+<tr><td><code>IDBUnsupportedError</code></td><td><code>indexedDB</code> not available (SSR, RN, Firefox private browsing, Safari private fail)</td><td>Render a degraded experience or surface a "feature unavailable" UI</td></tr>
+</tbody>
+</table>
+
+<h3>Where the mapping happens</h3>
+<p><code>db.ts.mapError(err)</code> is the single conversion point. It inspects <code>err.name</code> from a <code>DOMException</code> and returns the matching typed Error. Every <code>reject</code> in <code>db.ts</code> goes through it.</p>
+
+<h3>Adding a new error class</h3>
+<ol>
+<li>Declare the class in <code>db.ts</code> next to the others.</li>
+<li>Map its <code>DOMException.name</code> in <code>mapError</code>.</li>
+<li>Re-export from <code>index.ts</code>.</li>
+<li>Add a row to the table in the README.</li>
+<li>Add a test that triggers the underlying DOMException via <code>fake-indexeddb</code> if possible.</li>
+</ol>
+</section>
+
+<section id="ssr">
+<h2>9. SSR &amp; StrictMode</h2>
+
+<h3>SSR</h3>
+<ul>
+<li><code>defineIDB</code> never opens IDB at import time. The connection lazily opens when something calls <code>internal.getConnection()</code> - that is, when <code>useIDB</code> mounts on the client.</li>
+<li><code>useIDB</code>'s <code>getServerSnapshot</code> returns <code>{ status: "loading" }</code>. <code>useIDBQuery</code>'s server snapshot is <code>0</code> (the version), and the data state defaults to <code>{ data: undefined, status: "loading" }</code>.</li>
+<li>For Next.js App Router, mark client files with <code>"use client"</code>. Never call <code>defineIDB</code> from a server component.</li>
+<li>Hydration mismatches happen when the client side renders different markup based on data that was undefined on the server. Always gate UI on <code>status === "success"</code> or render a skeleton.</li>
+</ul>
+
+<h3>StrictMode</h3>
+<ul>
+<li>React 18+ StrictMode mounts effects twice. The singleton open-promise cache makes the second mount a no-op (returns the same Database instance).</li>
+<li>The <code>useIDBMutation</code> mounted ref correctly resets on the second mount.</li>
+<li>The <code>useIDBQuery</code> effect's cancellation (<code>let cancelled = false; ... return () =&gt; { cancelled = true; }</code>) means the first mount's in-flight Promise becomes a no-op when the second mount supersedes it.</li>
+</ul>
+</section>
+
+<section id="react-versions">
+<h2>10. React 16 - 19 strategy</h2>
+<table>
+<thead><tr><th>Version</th><th>useSyncExternalStore</th><th>Tearing</th><th>StrictMode</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>16.8 - 16.14</td><td>Vendored shim</td><td>Best-effort (legacy roots)</td><td>Single mount</td><td>Class component test exists for sanity</td></tr>
+<tr><td>17.x</td><td>Vendored shim</td><td>Best-effort</td><td>Single mount</td><td>Identical to 16</td></tr>
+<tr><td>18.x</td><td>Native (re-exported)</td><td>Concurrent-safe</td><td>Double mount handled</td><td>Primary target; matrix runs on 18.3.1</td></tr>
+<tr><td>19.x</td><td>Native (re-exported)</td><td>Concurrent-safe</td><td>Double mount handled</td><td>No code changes vs 18</td></tr>
+</tbody>
+</table>
+
+<h3>How the shim is selected</h3>
+<p><code>shim.ts</code> reads <code>(React as any).useSyncExternalStore</code> at module init. If present (R18+), the named export is the native function; otherwise, it is the fallback. The bundler keeps both code paths but tree-shakers can drop the fallback if a downstream app provides a side-effect-free <code>react</code> module - in practice both ship.</p>
+
+<h3>Pitfalls when bumping React</h3>
+<ul>
+<li>If React 20+ ever changes <code>useSyncExternalStore</code>'s signature, our shim's fallback signature is the canonical source of truth - keep it backward compatible.</li>
+<li>If React eventually formalizes a "transition" API for selectors, consider an opt-in <code>{ priority: "transition" }</code> for <code>useIDBQuery</code>.</li>
+</ul>
+</section>
+
+<section id="tests">
+<h2>11. Test strategy</h2>
+
+<h3>Tooling</h3>
+<ul>
+<li><strong>Vitest</strong> + <strong>jsdom</strong>: unit and component tests.</li>
+<li><strong>fake-indexeddb</strong>: drop-in IDB polyfill auto-loaded in <code>test/setup.ts</code>.</li>
+<li><strong>@testing-library/react</strong>: component rendering and queries.</li>
+<li><strong>tsc --noEmit</strong> against <code>test-d/</code>: type-level assertions via <code>expectType</code> and <code>@ts-expect-error</code>.</li>
+<li><strong>esbuild + zlib gzip</strong>: bundle-size guard in <code>scripts/size.mjs</code>.</li>
+</ul>
+
+<h3>Test layout</h3>
+<table>
+<thead><tr><th>File</th><th>Layer</th><th>What it covers</th></tr></thead>
+<tbody>
+<tr><td><code>test/store.test.ts</code></td><td>store.ts</td><td>subscribe / notify / getVersion stability, dedup, listener errors</td></tr>
+<tr><td><code>test/crossTab.test.ts</code></td><td>crossTab.ts</td><td>no-op when BroadcastChannel undefined; fake BC roundtrip</td></tr>
+<tr><td><code>test/db.test.ts</code></td><td>db.ts</td><td>open + cache, CRUD, IDBUnsupportedError, upgrade error mapping</td></tr>
+<tr><td><code>test/hooks.test.tsx</code></td><td>hooks.ts</td><td>useIDB status, useIDBQuery reactivity, useIDBMutation status incl. error path, StrictMode</td></tr>
+<tr><td><code>test/crossTab-integration.test.tsx</code></td><td>full stack</td><td>two simulated tabs, mutation in one re-renders the other</td></tr>
+<tr><td><code>test-d/schema.test-d.ts</code></td><td>types.ts</td><td>compile-time inference and negative cases</td></tr>
+</tbody>
+</table>
+
+<h3>Coverage gates</h3>
+<p><code>vitest.config.ts</code> sets thresholds: 85% lines/functions/statements, 80% branches. <code>src/index.ts</code> and <code>src/types.ts</code> are excluded - they are pure re-exports / types.</p>
+
+<h3>Patterns to copy</h3>
+<ul>
+<li>Use <code>uniqueDbName()</code> (in <code>test/helpers.ts</code>) for every test to avoid cross-test contamination, even with fake-indexeddb.</li>
+<li>Use <code>__resetCache()</code> in <code>afterEach</code> to close every connection. <code>__dropCache()</code> only when intentionally simulating two tabs.</li>
+<li>For mutation error paths, capture the rejection via <code>act(() =&gt; mutate(...).catch(setLastError))</code> or by waiting on <code>status === "error"</code> with <code>waitFor</code>.</li>
+</ul>
+
+<h3>What is intentionally not tested</h3>
+<ul>
+<li>Real-browser cross-tab. Requires Playwright + multi-context. Optional CI job, not a hard gate.</li>
+<li>Real-browser quota errors. Mocked via fake-indexeddb only; real quota behaviour is browser-specific.</li>
+</ul>
+</section>
+
+<section id="build">
+<h2>12. Build &amp; publish pipeline</h2>
+
+<h3>tsup</h3>
+<p>Single entry <code>src/index.ts</code>, dual output ESM (<code>.js</code>) and CJS (<code>.cjs</code>) plus <code>.d.ts</code>/<code>.d.cts</code>. <code>react</code> and <code>react-dom</code> externalized. <code>treeshake: true</code>. Output goes to <code>dist/</code>.</p>
+
+<h3>Size guard</h3>
+<p><code>npm run size</code> reads <code>dist/index.js</code>, re-bundles with esbuild minified, gzips, and exits non-zero if &gt; 5 KB. Currently we are around 2.4 KB gzip; CI fails the build the moment we cross the budget so a regression is caught before merge.</p>
+
+<h3>Publish</h3>
+<p><code>prepublishOnly</code> chains <code>build</code> + <code>test</code> + <code>test:types</code>. <code>publishConfig.access = "public"</code>. The <code>files</code> array publishes only <code>dist/</code>, <code>README.md</code>, <code>LICENSE</code> (and implicitly <code>package.json</code>).</p>
+
+<h3>Versioning</h3>
+<ul>
+<li><strong>Patch</strong>: bug fixes, perf, internal refactors, doc-only changes.</li>
+<li><strong>Minor</strong>: new hooks, new error classes, new optional config flags.</li>
+<li><strong>Major</strong>: API removals, generic-shape changes, dropping a React major.</li>
+</ul>
+<p>Always pre-tag with <code>npm version --no-git-tag-version</code> from a clean tree, push, and let CI verify before publishing.</p>
+</section>
+
+<section id="ci">
+<h2>13. CI matrix</h2>
+<p><code>.github/workflows/ci.yml</code> defines three jobs:</p>
+<ul>
+<li><strong>build</strong>: matrix of Node {18, 20, 22} × React {16.14, 17.0.2, 18.3.1, 19.0.0}. Installs the React peer dynamically, runs <code>build</code> + <code>test</code> + <code>test:types</code>.</li>
+<li><strong>lint</strong>: single Node 20 job, runs <code>npm run lint</code>.</li>
+<li><strong>size</strong>: builds once and runs <code>npm run size</code>. Hard gate.</li>
+</ul>
+<h3>When a matrix cell fails</h3>
+<ul>
+<li>R16/17 only: very likely a shim regression. Check <code>shim.ts</code> and the <code>useIDBQuery</code> effect deps.</li>
+<li>R19 only: a future React internals change. File an issue; native <code>useSyncExternalStore</code> rarely changes.</li>
+<li>All matrices: a real bug; reproduce locally with <code>npm test</code> first.</li>
+</ul>
+</section>
+
+<section id="extending">
+<h2>14. Extending the library</h2>
+<p>Recipes for the most likely v1.x features. Each one calls out which layers change and which tests to add.</p>
+
+<h3>Recipe A: add a new query method (e.g. <code>byKeyRange</code>)</h3>
+<ol>
+<li><strong>types.ts</strong>: extend <code>DatabaseQueryAPI&lt;S&gt;</code> with the new signature.</li>
+<li><strong>db.ts</strong>: implement on the <code>queryApi</code> object using <code>readOne</code>/<code>readIndex</code> primitives. New tx per call. Map errors via <code>mapError</code>.</li>
+<li><strong>hooks.ts</strong>: usually no change - users call the new method from inside <code>useIDBQuery</code>'s <code>fn</code>.</li>
+<li><strong>tests</strong>: add a <code>db.test.ts</code> case for happy path and one for an invalid range. Add a <code>test-d/</code> assertion that the return type is correct.</li>
+<li><strong>README</strong>: one row in the API table.</li>
+</ol>
+
+<h3>Recipe B: add a new error class</h3>
+<p>See <a href="#errors">§8</a>. Two-line code change in <code>db.ts</code> + one-line export in <code>index.ts</code> + table row.</p>
+
+<h3>Recipe C: add a public <code>db.transaction(stores, mode, syncFn)</code> escape hatch</h3>
+<ol>
+<li><strong>types.ts</strong>: add to <code>DatabaseQueryAPI</code> with a constraint that <code>syncFn</code>'s return is <code>T | Promise&lt;T&gt;</code> but the doc requires sync-only IDB calls.</li>
+<li><strong>db.ts</strong>: open one tx, pass the <code>IDBObjectStore</code>(s) to <code>syncFn</code>, await <code>tx.oncomplete</code>, return the user's value. Stamp <code>reactivity.notify(stores)</code> + <code>channel.post</code> on success.</li>
+<li><strong>tests</strong>: include the "user awaited a foreign promise" anti-pattern and verify the error is recognizable.</li>
+<li><strong>README</strong>: prominent warning. This is the one place users can shoot themselves in the foot.</li>
+</ol>
+
+<h3>Recipe D: add bulk methods (<code>bulkPut</code>, <code>bulkDelete</code>)</h3>
+<ol>
+<li><strong>types.ts</strong>: extend <code>MutationOp&lt;S, N&gt;</code> with new variants <code>{ type: "bulkPut", values: ValueOf&lt;S, N&gt;[] }</code> etc.</li>
+<li><strong>db.ts</strong>: handle in <code>writeOne</code>'s callback by issuing multiple <code>store.put(v)</code> calls inside a single tx synchronously - the engine batches them.</li>
+<li><strong>tests</strong>: hooks test for <code>useIDBMutation</code> handling the new op.</li>
+</ol>
+
+<h3>Recipe E: support cursor-based queries</h3>
+<p>Cursors are stateful and span multiple events. Wrap them in a generator-style helper that returns an array (terminating the cursor when filtered) - do not expose raw cursors. Keep transaction lifetime equal to the cursor's <code>onsuccess</code> chain.</p>
+
+<h3>Recipe F: TanStack Query persistence adapter</h3>
+<p>Different package (<code>@react-indexeddb/persister-query</code>). Reuses <code>defineIDB</code> + <code>useIDBMutation</code>. Out of scope for this repo.</p>
+
+<h3>Recipe G: storage events fallback for cross-tab</h3>
+<p>Skip unless a real user reports broken cross-tab on a target browser. The implementation lives entirely in <code>crossTab.ts</code>; no other layer needs to know.</p>
+</section>
+
+<section id="debug">
+<h2>15. Debugging playbook</h2>
+<p>The bugs you will actually hit, and the first place to look.</p>
+
+<h3>Symptom: a component does not re-render after a mutation</h3>
+<ol>
+<li>Confirm the <code>stores</code> array passed to <code>useIDBQuery</code> includes the store you mutated. Otherwise, no listener was registered.</li>
+<li>Look at <code>useIDBQuery</code>'s <code>storesKey</code> - if you pass a fresh array each render whose <code>join</code>ed key changes, the subscribe-unsubscribe cycle can drop the bump. (Should not happen given the <code>useMemo</code>; but a custom wrapper hook could break it.)</li>
+<li>Check whether the user's <code>fn</code> closes over stale state. The Promise resolves to the value <em>read by the new tx</em>, but if the user transforms it via captured props, that capture is from the previous render.</li>
+<li>Verify <code>reactivity.notify</code> is being called from <code>db.ts.mutate</code> - log <code>storeName</code>.</li>
+</ol>
+
+<h3>Symptom: <code>InvalidStateError: The transaction has finished</code></h3>
+<p>Almost certainly an <code>await</code> on something other than an IDBRequest inside an open tx. See <a href="#tx-contract">§7</a>. Move the await outside the tx, or refactor to one tx per op.</p>
+
+<h3>Symptom: cross-tab works in Chrome but not in Firefox / Safari</h3>
+<ol>
+<li>Check <code>typeof BroadcastChannel</code> in DevTools. Safari supports it from 15.4. If undefined, our no-op fallback is engaged.</li>
+<li>Both tabs must be on the same origin (scheme, host, port). Cross-origin iframes have separate channels.</li>
+<li>Private browsing in Safari historically blocks IDB writes - <code>IDBUnsupportedError</code> appears as a successful open followed by failing writes.</li>
+</ol>
+
+<h3>Symptom: <code>onupgradeneeded</code> runs every page load</h3>
+<p>You bumped <code>version</code> without adding store creation, so the upgrade callback runs and does nothing - but it still runs only when the version changed. If it runs every load, the user's <code>upgrade</code> callback might be opening a new transaction or doing async work, which it must not. Upgrades are sync - schedule store creation directly on the <code>IDBVersionChangeEvent.target.result</code>.</p>
+
+<h3>Symptom: bundle size CI fails</h3>
+<ol>
+<li>Run <code>npm run build &amp;&amp; npm run size</code> locally.</li>
+<li>Look at <code>dist/index.js</code> for surprising imports. Common offenders: a <code>console.warn</code> in production, a verbose error message, an inadvertent <code>import * from "react"</code>.</li>
+<li>If a feature genuinely justifies the size, increase the budget intentionally in <code>scripts/size.mjs</code>. Do not silently raise.</li>
+</ol>
+
+<h3>Symptom: types pass <code>tsc</code> in <code>src/</code> but fail in user code</h3>
+<p>Probably a <code>SchemaLike&lt;S&gt;</code> regression - see <a href="#m-types">§4.1</a>. Add the user's failing example to <code>test-d/schema.test-d.ts</code>.</p>
+
+<h3>Symptom: StrictMode double-invocation breaks something</h3>
+<ol>
+<li>Confirm <code>defineIDB</code>'s singleton cache is hit on the second mount (<code>console.log</code> the cache key).</li>
+<li>Hooks: each effect needs an idempotent body or a clean teardown.</li>
+<li><code>useIDBMutation.mutate</code> is fine to fire twice; idempotency is the user's job (e.g. don't generate a fresh UUID inside <code>mutate</code> body).</li>
+</ol>
+
+<h3>Diagnostic snippets</h3>
+<pre><code class="language-ts">// Print every notify in dev:
+import { defineIDB } from "react-indexeddb";
+import { INTERNAL } from "react-indexeddb/internal-shim"; // not exported; for hacking only
+const db = defineIDB({ ... });
+const original = db[INTERNAL].reactivity.notify;
+db[INTERNAL].reactivity.notify = (stores) =&gt; {
+  console.debug("[idb] notify", stores);
+  original(stores);
+};</code></pre>
+<p>(<code>INTERNAL</code> is intentionally not part of the public API - this is a debug-only hack.)</p>
+</section>
+
+<section id="tree">
+<h2>16. File tree</h2>
+<pre><code class="language-bash">react-indexeddb/
+├── src/
+│   ├── index.ts          # public barrel
+│   ├── types.ts          # generic helpers + INTERNAL symbol
+│   ├── shim.ts           # vendored useSyncExternalStore
+│   ├── store.ts          # reactivity engine
+│   ├── crossTab.ts       # BroadcastChannel wrapper
+│   ├── db.ts             # IDB orchestrator + defineIDB
+│   └── hooks.ts          # useIDB / useIDBQuery / useIDBMutation
+├── test/
+│   ├── setup.ts          # fake-indexeddb/auto
+│   ├── helpers.ts        # uniqueDbName, waitFor, closeDb
+│   ├── store.test.ts
+│   ├── crossTab.test.ts
+│   ├── db.test.ts
+│   ├── hooks.test.tsx
+│   └── crossTab-integration.test.tsx
+├── test-d/
+│   ├── tsconfig.json
+│   └── schema.test-d.ts  # type-level assertions
+├── examples/
+│   └── todos/            # Vite app, deployed to GitHub Pages
+├── scripts/
+│   └── size.mjs          # gzip bundle-size guard
+├── docs/
+│   ├── build-plan.html   # ← you are here
+│   └── index.html        # landing page linking the docs
+├── .github/workflows/ci.yml
+├── package.json          # name: react-indexeddb
+├── tsconfig.json
+├── tsup.config.ts
+├── vitest.config.ts
+├── eslint.config.js
+├── .prettierrc
+├── README.md
+├── CHANGELOG.md
+└── LICENSE</code></pre>
+</section>
+
+<section id="glossary">
+<h2>17. Glossary</h2>
+<dl>
+<dt><strong>Channel</strong></dt><dd>In <code>store.ts</code>, a string key (usually a store name, plus a few specials like <code>__status__</code>) that listeners subscribe to. Independent of <code>BroadcastChannel</code>.</dd>
+<dt><strong>External store</strong></dt><dd>A data source outside React's render-tree. <code>useSyncExternalStore</code> is React's API for subscribing to one tearing-safely.</dd>
+<dt><strong>F-bounded polymorphism</strong></dt><dd>A generic constraint that uses the type parameter on both sides, e.g. <code>S extends SchemaLike&lt;S&gt;</code>. Lets us accept user-defined interfaces without forcing index signatures on them.</dd>
+<dt><strong>Notify-then-broadcast</strong></dt><dd>Our cross-tab order: invalidate locally first, post to other tabs second. Avoids racing same-tab listeners against the channel.</dd>
+<dt><strong>One-shot transaction</strong></dt><dd>A transaction opened to schedule exactly one IDBRequest. Closes itself when that request settles. The unit of work in <code>db.ts</code>.</dd>
+<dt><strong>Snapshot stability</strong></dt><dd>The contract that <code>getSnapshot</code> returns identical-by-<code>Object.is</code> values until something changes. Without it, <code>useSyncExternalStore</code> infinite-renders.</dd>
+<dt><strong>Tearing</strong></dt><dd>When two components in the same render commit see different values from the same external source. <code>useSyncExternalStore</code> on R18+ guarantees no tearing.</dd>
+<dt><strong>Vendored shim</strong></dt><dd>A small dependency copied into <code>src/</code> rather than installed from npm. Our <code>shim.ts</code> is one.</dd>
+</dl>
+</section>
+
+</article>
+</main>
+<script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+mermaid.initialize({ startOnLoad: true, theme: window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "default", securityLevel: "loose" });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/core.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/languages/typescript.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/languages/javascript.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/languages/json.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/languages/yaml.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/languages/bash.min.js"></script>
+<script>
+document.querySelectorAll("pre code").forEach((el) => { try { hljs.highlightElement(el); } catch (e) {} });
+</script>
+</body>
+</html>
