@@ -14,7 +14,7 @@
  * This file MUST NOT import React, the IndexedDB API, or `store.ts`.
  */
 
-const PREFIX = "react-indexeddb:";
+const PREFIX = "react-idb-hooks:";
 
 export interface CrossTabMessage {
   /** Names of object stores touched by the originating write. */

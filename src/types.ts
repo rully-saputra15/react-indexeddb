@@ -1,5 +1,5 @@
 /**
- * Public type vocabulary for `react-indexeddb`.
+ * Public type vocabulary for `react-idb-hooks`.
  *
  * This file is intentionally type-only. It MUST NOT contain runtime code,
  * import React, or import the IndexedDB API.
@@ -129,7 +129,7 @@ export type MutationOp<S, N extends StoreName<S>> =
  * This keeps `db.ts` and `hooks.ts` decoupled at the type level: only `hooks.ts`
  * imports the `INTERNAL` symbol and reads through it.
  */
-export const INTERNAL = Symbol.for("react-indexeddb.internal");
+export const INTERNAL = Symbol.for("react-idb-hooks.internal");
 export type INTERNAL = typeof INTERNAL;
 
 /**

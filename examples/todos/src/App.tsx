@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useIDB, useIDBMutation, useIDBQuery } from "react-indexeddb";
+import { useIDB, useIDBMutation, useIDBQuery } from "react-idb-hooks";
 import { appDb, type Todo } from "./db";
 
 const styles = {

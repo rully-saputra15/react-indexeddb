@@ -32,7 +32,7 @@ jobs:
         working-directory: examples/todos
         env:
           # Path GitHub Pages serves the project from. Matches the repo name.
-          BASE_PATH: /react-indexeddb/
+          BASE_PATH: /react-idb-hooks/
         run: npm run build
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

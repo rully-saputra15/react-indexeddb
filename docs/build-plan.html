@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>react-indexeddb · Build Plan</title>
+<title>react-idb-hooks · Build Plan</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
 <style>
@@ -149,7 +149,7 @@ hr.divider { border: 0; height: 1px; background: var(--border); margin: 32px 0; 
 <article>
 
 <section id="tldr">
-<h1>react-indexeddb · Build Plan</h1>
+<h1>react-idb-hooks · Build Plan</h1>
 <p class="lede">A self-contained engineering reference. Open this file offline whenever you need to debug a regression, extend the library, or onboard yourself again in six months.</p>
 
 <p><strong>What this library is.</strong> A zero-runtime-dependency, TypeScript-first React hooks library that wraps IndexedDB and exposes it reactively. Same-tab and cross-tab. Works on React 16.8 - 19. Ships in 2.4 KB gzip.</p>
@@ -309,7 +309,7 @@ export const useSyncExternalStore = NATIVE ?? useSyncExternalStoreFallback;</cod
 <div class="layer-card" id="m-crosstab">
 <h3>4.4 <code>src/crossTab.ts</code></h3>
 <p class="meta"><span class="tag">no React</span><span class="tag">no IDB</span><span class="tag">no store.ts</span></p>
-<p>Wraps <code>BroadcastChannel</code> with a feature-detect and returns a uniform <code>{ post, onMessage, close }</code>. The channel name is <code>"react-indexeddb:" + dbName</code>.</p>
+<p>Wraps <code>BroadcastChannel</code> with a feature-detect and returns a uniform <code>{ post, onMessage, close }</code>. The channel name is <code>"react-idb-hooks:" + dbName</code>.</p>
 <h4>No-op fallback</h4>
 <p>If <code>typeof BroadcastChannel === "undefined"</code> we return a no-op channel. Hooks still work; cross-tab silently disables. We do <em>not</em> polyfill via <code>storage</code> events for v1.</p>
 <h4>Why no echo-to-self</h4>
@@ -391,7 +391,7 @@ We <code>notify</code> locally first, then <code>post</code> on the channel. Oth
 
 <section id="crosstab-flow">
 <h2>6. Cross-tab flow</h2>
-<p>Cross-tab uses <code>BroadcastChannel</code>. Each tab owns its own <code>Database&lt;S&gt;</code> object, its own <code>ReactivityStore</code>, and its own <code>BroadcastChannel</code> instance bound to the channel name <code>"react-indexeddb:" + dbName</code>.</p>
+<p>Cross-tab uses <code>BroadcastChannel</code>. Each tab owns its own <code>Database&lt;S&gt;</code> object, its own <code>ReactivityStore</code>, and its own <code>BroadcastChannel</code> instance bound to the channel name <code>"react-idb-hooks:" + dbName</code>.</p>
 
 <pre class="mermaid">
 sequenceDiagram
@@ -627,7 +627,7 @@ The browser auto-commits an IDB transaction when its task queue empties. <code>a
 <p>Cursors are stateful and span multiple events. Wrap them in a generator-style helper that returns an array (terminating the cursor when filtered) - do not expose raw cursors. Keep transaction lifetime equal to the cursor's <code>onsuccess</code> chain.</p>
 
 <h3>Recipe F: TanStack Query persistence adapter</h3>
-<p>Different package (<code>@react-indexeddb/persister-query</code>). Reuses <code>defineIDB</code> + <code>useIDBMutation</code>. Out of scope for this repo.</p>
+<p>Different package (<code>@react-idb-hooks/persister-query</code>). Reuses <code>defineIDB</code> + <code>useIDBMutation</code>. Out of scope for this repo.</p>
 
 <h3>Recipe G: storage events fallback for cross-tab</h3>
 <p>Skip unless a real user reports broken cross-tab on a target browser. The implementation lives entirely in <code>crossTab.ts</code>; no other layer needs to know.</p>
@@ -677,8 +677,8 @@ The browser auto-commits an IDB transaction when its task queue empties. <code>a
 
 <h3>Diagnostic snippets</h3>
 <pre><code class="language-ts">// Print every notify in dev:
-import { defineIDB } from "react-indexeddb";
-import { INTERNAL } from "react-indexeddb/internal-shim"; // not exported; for hacking only
+import { defineIDB } from "react-idb-hooks";
+import { INTERNAL } from "react-idb-hooks/internal-shim"; // not exported; for hacking only
 const db = defineIDB({ ... });
 const original = db[INTERNAL].reactivity.notify;
 db[INTERNAL].reactivity.notify = (stores) =&gt; {
@@ -690,7 +690,7 @@ db[INTERNAL].reactivity.notify = (stores) =&gt; {
 
 <section id="tree">
 <h2>16. File tree</h2>
-<pre><code class="language-bash">react-indexeddb/
+<pre><code class="language-bash">react-idb-hooks/
 ├── src/
 │   ├── index.ts          # public barrel
 │   ├── types.ts          # generic helpers + INTERNAL symbol
@@ -718,7 +718,7 @@ db[INTERNAL].reactivity.notify = (stores) =&gt; {
 │   ├── build-plan.html   # ← you are here
 │   └── index.html        # landing page linking the docs
 ├── .github/workflows/ci.yml
-├── package.json          # name: react-indexeddb
+├── package.json          # name: react-idb-hooks
 ├── tsconfig.json
 ├── tsup.config.ts
 ├── vitest.config.ts

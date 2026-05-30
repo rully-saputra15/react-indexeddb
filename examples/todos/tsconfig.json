@@ -12,7 +12,7 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "react-indexeddb": ["../../src/index.ts"]
+      "react-idb-hooks": ["../../src/index.ts"]
     }
   },
   "include": ["src"]

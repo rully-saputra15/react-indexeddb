@@ -1,6 +1,6 @@
 # Todos example
 
-A minimal Vite + React app exercising every public hook of `react-indexeddb`:
+A minimal Vite + React app exercising every public hook of `react-idb-hooks`:
 
 - `defineIDB` — schema + migration in `src/db.ts`
 - `useIDB` — connection status badge in the header

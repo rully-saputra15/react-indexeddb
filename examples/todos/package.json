@@ -1,12 +1,12 @@
 {
-  "name": "react-indexeddb-example-todos",
+  "name": "react-idb-hooks-example-todos",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
-    "build:pages": "cross-env BASE_PATH=/react-indexeddb/ vite build",
+    "build:pages": "cross-env BASE_PATH=/react-idb-hooks/ vite build",
     "preview": "vite preview"
   },
   "dependencies": {

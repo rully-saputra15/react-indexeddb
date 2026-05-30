@@ -1,15 +1,15 @@
-# react-indexeddb
+# react-idb-hooks
 
 > Reactive IndexedDB hooks for React. Zero runtime dependencies. Works on React 16.8 - 19.
 
-[![npm](https://img.shields.io/npm/v/react-indexeddb.svg)](https://www.npmjs.com/package/react-indexeddb)
+[![npm](https://img.shields.io/npm/v/react-idb-hooks.svg)](https://www.npmjs.com/package/react-idb-hooks)
 [![bundle size](https://img.shields.io/badge/gzip-2.4%20KB-brightgreen)](#bundle-size)
-[![license](https://img.shields.io/npm/l/react-indexeddb.svg)](./LICENSE)
+[![license](https://img.shields.io/npm/l/react-idb-hooks.svg)](./LICENSE)
 
-**[Live demo →](https://rully-saputra15.github.io/react-indexeddb/)** · open it in two browser tabs to see the cross-tab sync.
+**[Live demo →](https://rully-saputra15.github.io/react-idb-hooks/)** · open it in two browser tabs to see the cross-tab sync.
 
 ```sh
-npm install react-indexeddb
+npm install react-idb-hooks
 ```
 
 ```tsx
@@ -23,7 +23,7 @@ That's it. No provider. No atom registry. No class to subclass.
 
 ## Why this library
 
-| | `react-indexeddb` | [`dexie-react-hooks`](https://www.npmjs.com/package/dexie-react-hooks) | [`use-indexeddb`](https://www.npmjs.com/package/use-indexeddb) | [`idb`](https://www.npmjs.com/package/idb) (raw) |
+| | `react-idb-hooks` | [`dexie-react-hooks`](https://www.npmjs.com/package/dexie-react-hooks) | [`use-indexeddb`](https://www.npmjs.com/package/use-indexeddb) | [`idb`](https://www.npmjs.com/package/idb) (raw) |
 |---|---|---|---|---|
 | Bundle (gzip) | **2.4 KB** | ~65 KB (with Dexie) | ~3 KB | ~3 KB |
 | Runtime deps | **0** | Dexie | 0 | 0 |
@@ -53,7 +53,7 @@ That's it. No provider. No atom registry. No class to subclass.
 
 ## Live demo
 
-The [live demo](https://rully-saputra15.github.io/react-indexeddb/) is the same code as [`examples/todos/`](./examples/todos). Source files worth a look:
+The [live demo](https://rully-saputra15.github.io/react-idb-hooks/) is the same code as [`examples/todos/`](./examples/todos). Source files worth a look:
 
 - [`examples/todos/src/db.ts`](./examples/todos/src/db.ts) — schema + migration
 - [`examples/todos/src/App.tsx`](./examples/todos/src/App.tsx) — every public hook in ~80 LOC
@@ -61,14 +61,14 @@ The [live demo](https://rully-saputra15.github.io/react-indexeddb/) is the same 
 Run it locally:
 
 ```sh
-git clone https://github.com/your-org/react-indexeddb.git
-cd react-indexeddb && npm install
+git clone https://github.com/your-org/react-idb-hooks.git
+cd react-idb-hooks && npm install
 cd examples/todos && npm install && npm run dev
 ```
 
 The Pages site is built and deployed automatically by [`.github/workflows/deploy-pages.yml`](./.github/workflows/deploy-pages.yml) on every push to `main`.
 
-> **First-time setup.** In your fork, go to **Settings → Pages** and set **Source** to **GitHub Actions**. Then update two strings: replace `your-org` in this README with your GitHub org/username, and update `BASE_PATH` in the workflow file if your repo is not named `react-indexeddb`.
+> **First-time setup.** In your fork, go to **Settings → Pages** and set **Source** to **GitHub Actions**. Then update two strings: replace `your-org` in this README with your GitHub org/username, and update `BASE_PATH` in the workflow file if your repo is not named `react-idb-hooks`.
 
 ---
 
@@ -80,7 +80,7 @@ The Pages site is built and deployed automatically by [`.github/workflows/deploy
 
 ```ts
 // src/db.ts
-import { defineIDB } from "react-indexeddb";
+import { defineIDB } from "react-idb-hooks";
 
 interface AppSchema {
   todos: {
@@ -107,7 +107,7 @@ export const appDb = defineIDB<AppSchema>({
 ### 2 — Read with `useIDBQuery`
 
 ```tsx
-import { useIDBQuery } from "react-indexeddb";
+import { useIDBQuery } from "react-idb-hooks";
 import { appDb } from "./db";
 
 function TodoList() {
@@ -140,7 +140,7 @@ db.getAllKeys("todos")
 ### 3 — Write with `useIDBMutation`
 
 ```tsx
-import { useIDBMutation } from "react-indexeddb";
+import { useIDBMutation } from "react-idb-hooks";
 
 function AddTodo() {
   const { mutate, status, error } = useIDBMutation(appDb, "todos");
@@ -175,7 +175,7 @@ mutate({ type: "clear" })
 ### 4 — Watch the connection with `useIDB`
 
 ```tsx
-import { useIDB } from "react-indexeddb";
+import { useIDB } from "react-idb-hooks";
 
 function StatusDot() {
   const { status, error } = useIDB(appDb);
@@ -198,7 +198,7 @@ import {
   IDBBlockedError,          // another tab is holding an old version open
   IDBQuotaExceededError,    // out of disk
   IDBUnsupportedError,      // no indexedDB available
-} from "react-indexeddb";
+} from "react-idb-hooks";
 
 try {
   await mutation.mutate({ type: "put", value });
