@@ -223,7 +223,7 @@ try {
 
 ## Bundle size
 
-Measured with `pnpm size` (esbuild minify + gzip):
+Measured with `npm run size` (esbuild minify + gzip):
 
 | Build | Minified | Gzipped |
 |---|---|---|

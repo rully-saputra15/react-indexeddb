@@ -19,7 +19,7 @@ const entry = resolve(root, "dist/index.js");
 try {
   statSync(entry);
 } catch {
-  console.error("dist/index.js not found. Run `pnpm build` first.");
+  console.error("dist/index.js not found. Run `npm run build` first.");
   process.exit(1);
 }
 

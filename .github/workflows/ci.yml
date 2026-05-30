@@ -18,52 +18,42 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-          cache: pnpm
+          cache: npm
 
-      - run: pnpm install --frozen-lockfile
+      - run: npm ci
 
       - name: Pin React ${{ matrix.react }}
         run: |
-          pnpm add -D react@${{ matrix.react }} react-dom@${{ matrix.react }}
+          npm install --no-save react@${{ matrix.react }} react-dom@${{ matrix.react }}
 
-      - run: pnpm build
-      - run: pnpm test
-      - run: pnpm test:types
+      - run: npm run build
+      - run: npm test
+      - run: npm run test:types
 
   lint:
     name: lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm lint
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
 
   size:
     name: bundle size
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm build
-      - run: pnpm size
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run size
