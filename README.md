@@ -12,6 +12,14 @@
 npm install react-idb-hooks
 ```
 
+```sh
+pnpm add react-idb-hooks
+```
+
+```sh
+yarn add react-idb-hooks
+```
+
 ```tsx
 const { data } = useIDBQuery(appDb, (db) => db.getAll("todos"), ["todos"]);
 const { mutate } = useIDBMutation(appDb, "todos");
