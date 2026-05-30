@@ -241,9 +241,12 @@ export function defineIDB<S extends SchemaLike<S>>(config: DefineIDBConfig<S>): 
   // Capturing `request.error` is more reliable than `tx.error`: the spec
   // populates `tx.error` only at abort-time, while many browsers (and
   // fake-indexeddb) leave it `null` when `tx.onerror` fires.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const writeOne = async (
     storeName: string,
+    // `any` here is deliberate: IDB request handlers are typed `this`-variant
+    // on `IDBRequest`, so concrete callers like `store.put(value)` would not
+    // be assignable to `IDBRequest<unknown>`. We only consume `request.error`.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fn: (store: IDBObjectStore) => IDBRequest<any>,
   ): Promise<void> => {
     const db = await open();

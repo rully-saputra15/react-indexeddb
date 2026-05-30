@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { renderHook, waitFor, act } from "@testing-library/react";
+import { waitFor, act } from "@testing-library/react";
 import { defineIDB, useIDBMutation, useIDBQuery } from "../src";
 import { __dropCache } from "../src/db";
-import { closeDb, uniqueDbName } from "./helpers";
+import { closeDb, uniqueDbName, renderHook } from "./helpers";
 
 interface AppSchema {
   todos: { value: { id: string; title: string }; key: string };

@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import * as React from "react";
-import { act, render, renderHook, waitFor } from "@testing-library/react";
+import { act, render, waitFor } from "@testing-library/react";
 import { defineIDB, useIDB, useIDBMutation, useIDBQuery } from "../src";
-import { uniqueDbName, closeDb } from "./helpers";
+import { uniqueDbName, closeDb, renderHook } from "./helpers";
 
 interface AppSchema {
   todos: {

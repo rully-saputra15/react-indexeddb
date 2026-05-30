@@ -4,7 +4,7 @@
 // Budget per the plan: <= 5 KB gzip for the core ESM bundle.
 
 import { gzipSync } from "node:zlib";
-import { readFileSync, statSync } from "node:fs";
+import { statSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 import { build } from "esbuild";

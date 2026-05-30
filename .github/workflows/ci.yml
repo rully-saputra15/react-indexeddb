@@ -26,8 +26,26 @@ jobs:
       - run: npm ci
 
       - name: Pin React ${{ matrix.react }}
+        shell: bash
         run: |
-          npm install --no-save react@${{ matrix.react }} react-dom@${{ matrix.react }}
+          # @testing-library/react@16 imports react-dom/client (React 18+).
+          # For React 16/17 cells, install the last compatible TL major (12.x).
+          # All version pins go through a single `npm install` so npm resolves
+          # them together; otherwise a follow-up install can restore versions
+          # from package-lock.json mid-pin.
+          case "${{ matrix.react }}" in
+            16.*|17.*)
+              npm install --no-save --legacy-peer-deps \
+                react@${{ matrix.react }} \
+                react-dom@${{ matrix.react }} \
+                @testing-library/react@12
+              ;;
+            *)
+              npm install --no-save \
+                react@${{ matrix.react }} \
+                react-dom@${{ matrix.react }}
+              ;;
+          esac
 
       - run: npm run build
       - run: npm test

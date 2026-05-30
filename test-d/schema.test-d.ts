@@ -78,7 +78,7 @@ function useExample() {
   expectType<{ id: string; title: string; done: boolean }[] | undefined>(result.data);
 
   // Unknown store name in the deps list must be rejected.
-  // @ts-expect-error
+  // @ts-expect-error -- "users" is not a declared store on AppSchema
   useIDBQuery(db, async (d) => d.getAll("todos"), ["users"]);
 }
 void useExample;
@@ -102,15 +102,15 @@ function useExample3() {
   void m.mutate({ type: "clear" });
 
   // Wrong value shape rejected:
-  // @ts-expect-error
+  // @ts-expect-error -- id must be a string per AppSchema
   void m.mutate({ type: "put", value: { id: 1, title: "x", done: false } });
 
   // Wrong key type rejected:
-  // @ts-expect-error
+  // @ts-expect-error -- delete key must match the schema's string key
   void m.mutate({ type: "delete", key: 123 });
 
   // Unknown op type rejected:
-  // @ts-expect-error
+  // @ts-expect-error -- "merge" is not a member of MutationOp
   void m.mutate({ type: "merge", value: { id: "1", title: "x", done: false } });
 }
 void useExample3;
