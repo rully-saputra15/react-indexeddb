@@ -61,17 +61,24 @@ That's it. No provider. No atom registry. No class to subclass.
 
 ## Live demo
 
-The [live demo](https://rully-saputra15.github.io/react-idb-hooks/) is the same code as [`examples/todos/`](./examples/todos). Source files worth a look:
+The [**Snip Shelf** flagship demo](https://rully-saputra15.github.io/react-idb-hooks/) — an offline snippet vault with capture+triage cross-tab workflow, Blob attachments, byte-sized treemap, and a v1→v2 schema migration. Open it in two browser tabs side-by-side to see the cross-tab `BroadcastChannel` story unfold.
 
-- [`examples/todos/src/db.ts`](./examples/todos/src/db.ts) — schema + migration
-- [`examples/todos/src/App.tsx`](./examples/todos/src/App.tsx) — every public hook in ~80 LOC
+Two examples live in this repo:
 
-Run it locally:
+| Example | Purpose | Source |
+|---|---|---|
+| [`examples/snip-shelf`](./examples/snip-shelf) | **Flagship** — every feature in a real product surface; deployed to GitHub Pages | [`src/db.ts`](./examples/snip-shelf/src/db.ts) · [`App.tsx`](./examples/snip-shelf/src/App.tsx) |
+| [`examples/minimal-api`](./examples/minimal-api) | The read-everything-in-one-sitting reference: every public hook in ~80 LOC of one-file todos | [`src/db.ts`](./examples/minimal-api/src/db.ts) · [`App.tsx`](./examples/minimal-api/src/App.tsx) |
+
+Run them locally:
 
 ```sh
 git clone https://github.com/rully-saputra15/react-idb-hooks.git
 cd react-idb-hooks && npm install
-cd examples/todos && npm install && npm run dev
+
+cd examples/snip-shelf && npm install && npm run dev   # flagship
+# or
+cd examples/minimal-api && npm install && npm run dev  # quickstart
 ```
 
 The Pages site is built and deployed automatically by [`.github/workflows/deploy-pages.yml`](./.github/workflows/deploy-pages.yml) on every push to `main`.

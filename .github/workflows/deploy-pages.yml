@@ -26,10 +26,10 @@ jobs:
       - name: Install root deps
         run: npm install --no-audit --no-fund
       - name: Install example deps
-        working-directory: examples/todos
+        working-directory: examples/snip-shelf
         run: npm install --no-audit --no-fund
       - name: Build demo
-        working-directory: examples/todos
+        working-directory: examples/snip-shelf
         env:
           # Path GitHub Pages serves the project from. Matches the repo name.
           BASE_PATH: /react-idb-hooks/
@@ -37,7 +37,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: examples/todos/dist
+          path: examples/snip-shelf/dist
 
   deploy:
     needs: build
