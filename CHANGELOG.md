@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.2 - 2026-06-07
+
+Supply-chain hygiene: address Socket.dev metadata alerts so consumers and security tooling can find the source of truth for this package.
+
+- Add `author`, `bugs`, and `homepage` fields to `package.json`.
+- Normalize `repository.url` to the `git+https://...` form per npm spec.
+- No source code changes; runtime, hooks, and bundle size are unchanged.
+
 ## 0.1.0 - 2026-05-30
 
 Initial release.
