@@ -5,8 +5,9 @@
 [![npm](https://img.shields.io/npm/v/react-idb-hooks.svg)](https://www.npmjs.com/package/react-idb-hooks)
 [![bundle size](https://img.shields.io/badge/gzip-2.4%20KB-brightgreen)](#bundle-size)
 [![license](https://img.shields.io/npm/l/react-idb-hooks.svg)](./LICENSE)
+[![Socket Badge](https://badge.socket.dev/npm/package/react-idb-hooks/0.1.2)](https://badge.socket.dev/npm/package/react-idb-hooks/0.1.2)
 
-**[Live demo →](https://rully-saputra15.github.io/react-idb-hooks/)** · open it in two browser tabs to see the cross-tab sync.
+**[Landing page →](https://rully-saputra15.github.io/react-idb-hooks/)** · **[Live demo →](https://rully-saputra15.github.io/react-idb-hooks/demo/)** — open the demo in two browser tabs to see the cross-tab sync.
 
 ```sh
 npm install react-idb-hooks
@@ -61,7 +62,7 @@ That's it. No provider. No atom registry. No class to subclass.
 
 ## Live demo
 
-The [**Snip Shelf** flagship demo](https://rully-saputra15.github.io/react-idb-hooks/) — an offline snippet vault with capture+triage cross-tab workflow, Blob attachments, byte-sized treemap, and a v1→v2 schema migration. Open it in two browser tabs side-by-side to see the cross-tab `BroadcastChannel` story unfold.
+The GitHub Pages site serves a [landing page](https://rully-saputra15.github.io/react-idb-hooks/) at the root and the [**Snip Shelf** flagship demo](https://rully-saputra15.github.io/react-idb-hooks/demo/) at `/demo/` — an offline snippet vault with capture+triage cross-tab workflow, Blob attachments, byte-sized treemap, and a v1→v2 schema migration. Open the demo in two browser tabs side-by-side to see the cross-tab `BroadcastChannel` story unfold.
 
 Two examples live in this repo:
 

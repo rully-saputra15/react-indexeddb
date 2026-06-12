@@ -31,13 +31,19 @@ jobs:
       - name: Build demo
         working-directory: examples/snip-shelf
         env:
-          # Path GitHub Pages serves the project from. Matches the repo name.
-          BASE_PATH: /react-idb-hooks/
+          # The demo is served from a /demo/ subpath under the Pages root.
+          BASE_PATH: /react-idb-hooks/demo/
         run: npm run build
+      - name: Assemble site (landing at root, demo at /demo/)
+        run: |
+          rm -rf _site
+          mkdir -p _site/demo
+          cp -r landing/. _site/
+          cp -r examples/snip-shelf/dist/. _site/demo/
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: examples/snip-shelf/dist
+          path: _site
 
   deploy:
     needs: build
