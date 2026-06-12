@@ -1,6 +1,6 @@
 {
   "name": "react-idb-hooks",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "description": "Zero-dependency, TypeScript-first React hooks for IndexedDB. Reactive, cross-tab, and React 16.8 - 19 compatible.",
   "keywords": [
     "react",
